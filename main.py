@@ -11,15 +11,8 @@ class UsersResource(Resource):
         if not user:
             abort(404, message=f"{user_id} не найден")
         return jsonify(
-            {'user': user.to_dict(
-                only=('id',
-                      'login',
-                      'registration_date',
-                      'description',
-                      'private_account',
-                      'avatar_photo_id')
-            )}
-        )
+            {'users': [user.to_dict(only=('id', 'login', 'registration_date', 'description', 'private_account',)) for
+                       user in user]})
 
 
 class UsersListResource(Resource):
@@ -27,19 +20,8 @@ class UsersListResource(Resource):
         session = db_session.create_session()
         userss = session.query(users.User).all()
         return jsonify(
-            {'users': [
-                user.to_dict(
-                    only=(
-                        'id',
-                        'login',
-                        'registration_date',
-                        'description',
-                        'private_account',
-                        'avatar_photo_id'
-                    )
-                ) for user in userss
-            ]}
-        )
+            {'users': [user.to_dict(only=('id', 'login', 'registration_date', 'description', 'private_account',)) for
+                       user in userss]})
 
 
 app = Flask(__name__)
